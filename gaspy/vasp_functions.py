@@ -8,7 +8,7 @@ __emails__ = ["zulissi@andrew.cmu.edu", "ktran@andrew.cmu.edu"]
 
 import os
 import uuid
-import codecs
+import binascii
 import numpy as np
 import ase.io
 from ase.io.trajectory import TrajectoryWriter
@@ -48,7 +48,8 @@ def runVasp(fname_in, fname_out, vasp_flags):
 
     # Parse and return output
     atoms_str = str(atoms)
-    traj_hex = open("all.traj", "r").read().encode("hex")
+    with open('all.traj', 'rb') as fhandle:
+        traj_hex = binascii.hexlify(fhandle.read()).decode("utf-8")
     energy = final_image.get_potential_energy()
     return atoms_str, traj_hex, energy
 
@@ -343,9 +344,8 @@ def atoms_to_hex(atoms):
     fname = str(uuid.uuid4()) + ".traj"
     atoms.write(fname)
     with open(fname, "rb") as fhandle:
-        _hex = encode_hex(fhandle.read())[0].decode("utf-8")
-
     try:
+            _hex = binascii.hexlify(fhandle.read()).decode("utf-8")
         os.remove(fname)
     except OSError:
         pass
@@ -353,7 +353,7 @@ def atoms_to_hex(atoms):
     return _hex
 
 
-decode_hex = codecs.getdecoder("hex_codec")
+#decode_hex = codecs.getdecoder("hex_codec")
 
 
 def hex_to_file(file_name, hex_):
@@ -366,7 +366,8 @@ def hex_to_file(file_name, hex_):
                     to
         hex_        A hex string of the object you want to write to the file
     """
-    # Dump the hex encoded string to a local file
-
-    with open(file_name, "wb") as fhandle:
-        fhandle.write(decode_hex(hex_)[0])
+    with open(file_name, 'wb') as fhandle:
+        unhex_str = binascii.unhexlify(hex_)
+        # b = str(unhex_str)[2:-1]
+        # b1 = bytes(b, 'utf-8')
+        fhandle.write(unhex_str)
