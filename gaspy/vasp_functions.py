@@ -344,11 +344,11 @@ def atoms_to_hex(atoms):
     fname = str(uuid.uuid4()) + ".traj"
     atoms.write(fname)
     with open(fname, "rb") as fhandle:
-    try:
+        try:
             _hex = binascii.hexlify(fhandle.read()).decode("utf-8")
-        os.remove(fname)
-    except OSError:
-        pass
+            os.remove(fname)
+        except OSError:
+            pass
 
     return _hex
 

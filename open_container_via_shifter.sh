@@ -5,8 +5,8 @@
 
 # Establish out how to mount GASpy to the container. This is the part
 # that assumes that you are running this script inside GASpy.
-gaspy_path=$(pwd)
+gaspy_path=$(pwd -P)
 gaspy_mounting_config="$gaspy_path:/home/GASpy"
 
 # Now open the container
-shifter --image=ulissigroup/gaspy:latest --volume=$gaspy_mounting_config --volume=$HOME/.ssh:/home/.ssh bash -i
+shifter --image=ulissigroup/gaspy:latest --volume="$gaspy_mounting_config" --volume=$HOME/.ssh:/home/.ssh bash -i
