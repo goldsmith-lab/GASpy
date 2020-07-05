@@ -40,6 +40,7 @@ def schedule_tasks(tasks, workers=1, local_scheduler=False):
                             quo.
     '''
     luigi_host = utils.read_rc('luigi_host')
+    luigi_port = utils.read_rc('luigi_port')
 
     # Ignore this silly Luigi warning that they're too lazy to fix
     with warnings.catch_warnings():
@@ -48,7 +49,7 @@ def schedule_tasks(tasks, workers=1, local_scheduler=False):
                                 'of type string.')
 
         if local_scheduler is False:
-            luigi.build(tasks, workers=workers, scheduler_host=luigi_host)
+            luigi.build(tasks, workers=workers, scheduler_host=luigi_host, scheduler_port=luigi_port)
         else:
             luigi.build(tasks, workers=workers, local_scheduler=True)
 

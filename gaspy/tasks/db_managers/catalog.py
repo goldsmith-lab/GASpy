@@ -153,7 +153,7 @@ def __run_insert_to_catalog_task(mpid, max_miller):
     '''
     task = _InsertSitesToCatalog(mpid, max_miller)
     try:
-        schedule_tasks([task], local_scheduler=True)
+        schedule_tasks([task], local_scheduler=False)
 
     # We need bulk calculations to enumerate our catalog. If these calculations
     # aren't done, then we won't find the Luigi task pickles. If this happens,
